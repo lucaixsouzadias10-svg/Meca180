@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#07090d" />
+  <title>Garage C180</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="assets/car_0.webp" as="image" fetchpriority="high" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="identity">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="24"/><path d="M32 8v25M32 33 11 45M32 33l21 12"/></svg>
+        </div>
+        <div>
+          <div class="kicker">GARAGE DIGITAL</div>
+          <h1>Mercedes-Benz <span>C180</span></h1>
+          <div class="car-meta">W205 • 2015 • M274.910 1.6 Turbo</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="exportBtn" title="Exportar dados" aria-label="Exportar dados">
+          <svg viewBox="0 0 24 24"><path d="M12 3v12m0-12 4 4m-4-4L8 7M5 13v6h14v-6"/></svg>
+        </button>
+        <label class="icon-btn" title="Importar dados" aria-label="Importar dados">
+          <svg viewBox="0 0 24 24"><path d="M12 16V4m0 12-4-4m4 4 4-4M5 11v8h14v-8"/></svg>
+          <input id="importInput" type="file" accept="application/json,.json" hidden />
+        </label>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="viewer-shell" aria-label="Visualizador do veículo">
+        <div class="scene" id="scene">
+          <div class="ambient ambient-one"></div>
+          <div class="ambient ambient-two"></div>
+          <div class="turntable"></div>
+          <div class="turntable-ring"></div>
+
+          <div class="scene-info">
+            <div>
+              <div class="scene-mode" id="sceneMode">EXTERNO</div>
+              <div class="scene-title" id="sceneTitle">C180 • Visão geral</div>
+            </div>
+            <div class="scene-status" id="sceneStatus"><span></span> Interativo</div>
+          </div>
+
+          <div class="canvas-wrap" id="canvasWrap">
+            <img id="stageImage" draggable="false" alt="Mercedes-Benz C180 interativa" />
+            <div id="hotspotLayer" class="hotspot-layer"></div>
+            <div id="hoverLabel" class="hover-label" hidden></div>
+          </div>
+
+          <div class="scene-hint" id="sceneHint">
+            <span class="mouse-icon"></span>
+            Arraste para girar. Passe o mouse nas peças para selecionar.
+          </div>
+
+          <button id="backBtn" class="floating-back" hidden aria-label="Voltar">
+            <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg><span>Voltar</span>
+          </button>
+        </div>
+
+        <nav class="control-dock" aria-label="Controles do visualizador">
+          <button id="prevBtn" class="dock-btn" title="Ângulo anterior"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+          <button id="autoBtn" class="dock-btn dock-main" title="Rotação automática"><svg id="autoIcon" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M6.5 8a7 7 0 0 1 11.2-1.2L20 9M4 15l2.3 2.2A7 7 0 0 0 17.5 16"/></svg><span id="autoText">Girar</span></button>
+          <button id="nextBtn" class="dock-btn" title="Próximo ângulo"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+          <div class="dock-separator"></div>
+          <button id="homeBtn" class="dock-btn" title="Vista inicial"><svg viewBox="0 0 24 24"><path d="m4 11 8-7 8 7v9h-6v-6h-4v6H4z"/></svg></button>
+        </nav>
+      </section>
+
+      <aside class="project-rail">
+        <section class="rail-card project-card">
+          <div class="rail-head">
+            <div>
+              <div class="rail-kicker">PROJETO</div>
+              <h2>Seu plano para a C180</h2>
+            </div>
+            <button id="addGeneralBtn" class="round-add" title="Adicionar registro geral">+</button>
+          </div>
+          <div class="money-row">
+            <div><span>Investido</span><strong id="spentTotal">R$ 0</strong></div>
+            <div><span>Pendente</span><strong id="remainTotal">R$ 0</strong></div>
+          </div>
+          <div class="project-total"><span>Projeto total</span><strong id="projectTotal">R$ 0</strong></div>
+          <div class="project-progress"><span id="progressBar"></span></div>
+          <div class="progress-caption"><span id="progressPct">0%</span><span id="recordCount">0 registros</span></div>
+        </section>
+
+        <section class="rail-card mode-card" id="modeCard">
+          <div class="mode-icon" id="modeIcon"></div>
+          <div>
+            <div class="rail-kicker" id="modeKicker">VEÍCULO</div>
+            <h3 id="modeTitle">Carro completo</h3>
+            <p id="modeDescription">Clique diretamente em uma peça para abrir o registro dela.</p>
+          </div>
+          <div id="modeActions" class="mode-actions"></div>
+        </section>
+
+        <section class="rail-card history-card">
+          <div class="history-head">
+            <div>
+              <div class="rail-kicker">HISTÓRICO</div>
+              <h3 id="historyTitle">Últimos registros</h3>
+            </div>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <aside class="part-drawer" id="partDrawer" aria-hidden="true">
+    <div class="drawer-top">
+      <button id="drawerClose" class="drawer-close" aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <div class="part-type" id="drawerSystem">PEÇA</div>
+      <h2 id="drawerTitle">Peça</h2>
+      <p id="drawerDescription">Registre o que foi feito ou o que ainda precisa ser alterado.</p>
+    </div>
+
+    <div class="drawer-tabs">
+      <button class="drawer-tab active" data-tab="register">Registro</button>
+      <button class="drawer-tab" data-tab="history">Histórico <span id="drawerHistoryCount">0</span></button>
+    </div>
+
+    <div class="drawer-panel active" data-panel="register">
+      <form id="recordForm">
+        <input id="recordPart" type="hidden" />
+        <input id="recordSystem" type="hidden" />
+
+        <div class="status-segment" id="statusSegment">
+          <button type="button" data-status="done"><i></i> Já foi feito</button>
+          <button type="button" data-status="pending" class="active"><i></i> Precisa fazer</button>
+          <button type="button" data-status="planned"><i></i> Planejado</button>
+        </div>
+        <input id="recordStatus" type="hidden" value="pending" />
+
+        <div class="field-row two">
+          <label>Valor previsto
+            <div class="money-input"><span>R$</span><input id="recordEstimated" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+          </label>
+          <label>Valor já gasto
+            <div class="money-input"><span>R$</span><input id="recordSpent" type="number" min="0" step="0.01" placeholder="0,00" /></div>
+          </label>
+        </div>
+
+        <label>O que foi / precisa ser feito
+          <input id="recordWork" required placeholder="Ex.: polimento, troca, revisão, instalação..." />
+        </label>
+        <label>O que precisa alterar
+          <textarea id="recordChange" placeholder="Ex.: substituir peça, mudar acabamento, fazer upgrade..."></textarea>
+        </label>
+
+        <div class="field-row two">
+          <label>Data do serviço
+            <input id="recordDate" type="date" />
+          </label>
+          <label>Quilometragem
+            <input id="recordKm" type="number" min="0" placeholder="133000" />
+          </label>
+        </div>
+
+        <label>Planejado para
+          <input id="recordPlannedDate" type="date" />
+        </label>
+        <label>Link da peça / produto
+          <div class="link-input"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1-1"/></svg><input id="recordLink" type="url" placeholder="https://" /></div>
+        </label>
+        <label>Observações
+          <textarea id="recordNotes" placeholder="Oficina, marca, garantia, detalhes adicionais..."></textarea>
+        </label>
+
+        <button class="save-btn" type="submit"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>Salvar registro</button>
+      </form>
+    </div>
+
+    <div class="drawer-panel" data-panel="history">
+      <div id="drawerHistory" class="drawer-history"></div>
+    </div>
+  </aside>
+  <div id="drawerBackdrop" class="drawer-backdrop"></div>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
