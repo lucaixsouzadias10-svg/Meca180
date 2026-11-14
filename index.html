@@ -3,119 +3,101 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#05070a" />
+  <meta name="theme-color" content="#080b0f" />
   <meta name="description" content="Garage digital interativa da Mercedes-Benz C180 W205." />
-  <title>meca180 — Garage C180</title>
+  <title>MECA180 — C180 Digital Garage</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preload" href="assets/car_0.webp" as="image" fetchpriority="high" />
-  <link rel="preload" href="assets/car_1.webp" as="image" />
-  <link rel="preload" href="assets/car_2.webp" as="image" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div class="app">
-    <header class="header">
-      <a class="brand" href="#" aria-label="meca180">
-        <span class="star"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="25"/><path d="M32 8v25M32 33 11 45M32 33l21 12"/></svg></span>
-        <span><b>meca180</b><small>C180 DIGITAL GARAGE</small></span>
-      </a>
-      <div class="vehicle-id"><span class="live-dot"></span><b>Mercedes-Benz C180</b><span>W205 · 2015 · M274.910</span></div>
-      <div class="header-actions">
-        <button class="icon-button" id="exportBtn" title="Exportar dados" aria-label="Exportar dados"><svg viewBox="0 0 24 24"><path d="M12 3v12m0-12 4 4m-4-4L8 7M5 13v6h14v-6"/></svg></button>
-        <label class="icon-button" title="Importar dados" aria-label="Importar dados"><svg viewBox="0 0 24 24"><path d="M12 16V4m0 12-4-4m4 4 4-4M5 11v8h14v-8"/></svg><input id="importInput" type="file" accept=".json,application/json" hidden></label>
-      </div>
-    </header>
-
-    <main class="garage">
-      <section class="hero" id="hero">
-        <div class="ambient" aria-hidden="true"></div>
-
-        <div class="scene-header">
-          <div class="breadcrumb" id="breadcrumb"><span>C180</span><b>/</b><strong>Visão geral</strong></div>
-          <div class="mode-pill"><i></i><span id="modeLabel">EXTERNO</span></div>
-        </div>
-
-        <div class="vehicle-stage" id="vehicleStage" aria-label="Visualização interativa do veículo">
-          <div id="frameDeck" class="frame-deck"></div>
-          <img id="sceneImage" class="scene-image" alt="Cena interativa da Mercedes-Benz C180" hidden draggable="false" />
-          <div id="badgePatch" class="badge-patch" hidden aria-hidden="true">C180</div>
-          <div id="hotspotLayer" class="hotspot-layer"></div>
-          <div id="partTooltip" class="part-tooltip" hidden></div>
-        </div>
-
-        <div class="loading" id="loading"><span></span><b>Preparando garagem</b></div>
-
-        <div class="interaction-hint" id="interactionHint"><span class="cursor-symbol"></span><span>Passe o mouse sobre o carro para explorar as peças</span></div>
-
-        <div class="project-float">
-          <div class="project-progress-ring" id="progressRing"><span id="progressPct">0%</span></div>
-          <div><small>PROJETO</small><strong id="projectTotal">R$ 0</strong><span><b id="spentTotal">R$ 0</b> investido · <b id="remainTotal">R$ 0</b> pendente</span></div>
-          <button id="generalAdd" class="mini-add" aria-label="Adicionar registro geral">+</button>
-        </div>
-
-        <nav class="dock" id="dock">
-          <button id="prevBtn" class="dock-button" title="Ângulo anterior"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
-          <button id="rotateBtn" class="dock-button primary"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M6.5 8a7 7 0 0 1 11.2-1.2L20 9M4 15l2.3 2.2A7 7 0 0 0 17.5 16"/></svg><span id="rotateText">Girar</span></button>
-          <button id="nextBtn" class="dock-button" title="Próximo ângulo"><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
-          <span class="dock-divider"></span>
-          <button id="hoodShortcut" class="dock-button text-action"><svg viewBox="0 0 24 24"><path d="M4 16h16M6 16l2-8h8l2 8M9 8l1.5-3h3L15 8"/></svg><span>Capô</span></button>
-          <button id="exhaustShortcut" class="dock-button text-action"><svg viewBox="0 0 24 24"><path d="M3 14h7l2-3h7v6h-7l-2-3H3zM19 12h2v4h-2"/></svg><span>Escape</span></button>
-          <button id="backBtn" class="dock-button text-action" hidden><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg><span>Voltar</span></button>
-        </nav>
-      </section>
-    </main>
-  </div>
-
-  <div class="drawer-backdrop" id="drawerBackdrop"></div>
-  <aside class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawer-handle"></div>
-    <header class="drawer-header">
-      <div class="part-icon" id="partIcon"></div>
-      <div><small id="drawerSystem">PEÇA</small><h2 id="drawerTitle">Peça</h2><p id="drawerSubtitle">Registre serviços, custos e alterações.</p></div>
-      <button id="drawerClose" class="drawer-close" aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    </header>
-
-    <div class="drawer-tabs">
-      <button class="drawer-tab active" data-tab="register">Registro</button>
-      <button class="drawer-tab" data-tab="history">Histórico <span id="drawerCount">0</span></button>
+  <div class="workshop-app">
+    <div class="workshop-bg" aria-hidden="true">
+      <div class="ceiling-light l1"></div><div class="ceiling-light l2"></div><div class="ceiling-light l3"></div>
+      <div class="garage-wall left-wall"><i></i><i></i><i></i></div>
+      <div class="garage-wall right-wall"><i></i><i></i><i></i></div>
+      <div class="floor-grid"></div>
     </div>
 
-    <section class="drawer-page active" data-page="register">
-      <form id="recordForm">
-        <input id="recordPart" type="hidden" />
-        <input id="recordSystem" type="hidden" />
-        <input id="recordStatus" type="hidden" value="pending" />
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="MECA180">
+        <span class="brand-mark">M</span>
+        <span><b>MECA180</b><small>DIGITAL GARAGE</small></span>
+      </a>
+      <nav class="main-tabs" aria-label="Navegação principal">
+        <button class="tab active" data-view="car">Visão geral</button>
+        <button class="tab" data-view="hood">Mecânica</button>
+        <button class="tab" data-view="services">Serviços</button>
+        <button class="tab" data-view="history">Histórico</button>
+      </nav>
+      <div class="vehicle-chip"><span></span><b>C180</b><small>W205 · 2015 · M274.910</small></div>
+    </header>
 
-        <div class="status-choice" id="statusChoice">
-          <button type="button" data-status="done"><i></i><span>Feito</span></button>
-          <button type="button" data-status="pending" class="active"><i></i><span>Precisa fazer</span></button>
-          <button type="button" data-status="planned"><i></i><span>Planejado</span></button>
+    <main class="main-stage">
+      <section class="scene-copy">
+        <div class="eyebrow" id="sceneEyebrow">GARAGEM / EXTERNO</div>
+        <h1 id="sceneTitle">Mercedes-Benz C180</h1>
+        <p id="sceneDescription">Passe o mouse sobre uma peça para destacar o contorno. Clique para registrar o que foi feito ou o que ainda falta.</p>
+      </section>
+
+      <section class="vehicle-zone" id="vehicleZone">
+        <div class="vehicle-stage" id="vehicleStage">
+          <div class="frame-deck" id="frameDeck"></div>
+          <img class="scene-image" id="sceneImage" alt="Cena mecânica da Mercedes-Benz C180" draggable="false" hidden />
+          <svg class="hotspot-svg" id="hotspotSvg" viewBox="0 0 100 75" preserveAspectRatio="none" aria-label="Peças selecionáveis"></svg>
+          <div class="part-tooltip" id="partTooltip" hidden></div>
+          <div class="badge-fix" id="badgeFix" hidden><span>C180</span></div>
         </div>
+      </section>
 
-        <div class="field-pair">
-          <label>Valor previsto<div class="money-field"><span>R$</span><input id="recordEstimated" type="number" min="0" step="0.01" placeholder="0,00" /></div></label>
-          <label>Valor gasto<div class="money-field"><span>R$</span><input id="recordSpent" type="number" min="0" step="0.01" placeholder="0,00" /></div></label>
+      <div class="stage-hud">
+        <div class="hud-card project-card">
+          <span class="hud-label">PROJETO</span>
+          <strong id="projectTotal">R$ 0</strong>
+          <small><b id="spentTotal">R$ 0</b> investido · <b id="remainTotal">R$ 0</b> pendente</small>
         </div>
-
-        <label>O que foi / precisa ser feito<input id="recordWork" required placeholder="Ex.: trocar, pintar, revisar, instalar..." /></label>
-        <label>O que precisa alterar<textarea id="recordChange" placeholder="Ex.: substituir por outra peça, fazer upgrade, corrigir acabamento..."></textarea></label>
-
-        <div class="field-pair">
-          <label>Data<input id="recordDate" type="date" /></label>
-          <label>Quilometragem<input id="recordKm" type="number" min="0" placeholder="133000" /></label>
+        <div class="hud-controls">
+          <button id="prevBtn" class="circle-btn" aria-label="Ângulo anterior">‹</button>
+          <button id="rotateBtn" class="rotate-btn"><span class="rotate-icon">↻</span><b id="rotateText">Girar 360°</b></button>
+          <button id="nextBtn" class="circle-btn" aria-label="Próximo ângulo">›</button>
+          <button id="backBtn" class="back-btn" hidden>← Voltar</button>
         </div>
-        <label>Planejado para<input id="recordPlannedDate" type="date" /></label>
-        <label>Link da peça / produto<div class="link-field"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.1 1M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.1-1"/></svg><input id="recordLink" type="url" placeholder="https://" /></div></label>
-        <label>Observações<textarea id="recordNotes" placeholder="Marca, oficina, garantia, medidas, detalhes..."></textarea></label>
+        <div class="hud-card mode-card"><span class="status-dot"></span><div><span class="hud-label">MODO</span><strong id="modeName">Exterior</strong></div></div>
+      </div>
 
-        <button class="save-button" type="submit"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>Salvar registro</button>
-      </form>
-    </section>
+      <div class="hover-help" id="hoverHelp"><span class="mouse-icon"></span><span>Explore as peças do carro</span></div>
+    </main>
 
-    <section class="drawer-page" data-page="history"><div id="drawerHistory" class="drawer-history"></div></section>
-  </aside>
+    <aside class="drawer" id="drawer" aria-hidden="true">
+      <header class="drawer-head">
+        <div><span id="drawerSystem">PEÇA</span><h2 id="drawerTitle">Peça selecionada</h2><p id="drawerSubtitle">Registre manutenção, reparo ou alteração.</p></div>
+        <button id="drawerClose" class="drawer-close">×</button>
+      </header>
+      <div class="drawer-tabs"><button class="drawer-tab active" data-panel="register">Registro</button><button class="drawer-tab" data-panel="history">Histórico <b id="drawerCount">0</b></button></div>
+      <section class="drawer-panel active" data-panel-content="register">
+        <form id="recordForm">
+          <input type="hidden" id="recordPart" /><input type="hidden" id="recordSystem" /><input type="hidden" id="recordStatus" value="pending" />
+          <div class="status-row"><button type="button" data-status="done">Feito</button><button type="button" data-status="pending" class="active">Precisa fazer</button><button type="button" data-status="planned">Planejado</button></div>
+          <label>O que foi / precisa ser feito<input id="recordWork" required placeholder="Ex.: pintar porta, trocar pneu, revisar turbo..." /></label>
+          <label>O que precisa alterar<textarea id="recordChange" placeholder="Descreva a alteração desejada"></textarea></label>
+          <div class="two-col"><label>Valor previsto<div class="money"><span>R$</span><input id="recordEstimated" type="number" min="0" step="0.01" /></div></label><label>Valor gasto<div class="money"><span>R$</span><input id="recordSpent" type="number" min="0" step="0.01" /></div></label></div>
+          <div class="two-col"><label>Data<input id="recordDate" type="date" /></label><label>Quilometragem<input id="recordKm" type="number" min="0" placeholder="133000" /></label></div>
+          <label>Planejado para<input id="recordPlannedDate" type="date" /></label>
+          <label>Link da peça<input id="recordLink" type="url" placeholder="https://" /></label>
+          <label>Observações<textarea id="recordNotes" placeholder="Marca, oficina, garantia, medidas..."></textarea></label>
+          <button class="save-btn" type="submit">Salvar registro</button>
+        </form>
+      </section>
+      <section class="drawer-panel" data-panel-content="history"><div id="drawerHistory" class="history-list"></div></section>
+    </aside>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
 
-  <div id="toast" class="toast"></div>
+    <section class="overlay-page" id="servicesPage" hidden><div class="overlay-card"><header><div><span>SERVIÇOS</span><h2>Projeto da C180</h2></div><button class="overlay-close" data-close-overlay>×</button></header><div id="servicesList" class="service-grid"></div></div></section>
+    <section class="overlay-page" id="historyPage" hidden><div class="overlay-card"><header><div><span>HISTÓRICO</span><h2>Linha do tempo</h2></div><button class="overlay-close" data-close-overlay>×</button></header><div id="globalHistory" class="timeline"></div></div></section>
+
+    <div class="loading" id="loading"><i></i><span>Carregando garagem</span></div>
+    <div class="toast" id="toast"></div>
+  </div>
   <script src="js/app.js"></script>
 </body>
 </html>
