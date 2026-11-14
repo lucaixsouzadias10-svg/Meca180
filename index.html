@@ -8,6 +8,8 @@
   <title>meca180 — Garage C180</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
   <link rel="preload" href="assets/car_0.webp" as="image" fetchpriority="high" />
+  <link rel="preload" href="assets/car_1.webp" as="image" />
+  <link rel="preload" href="assets/car_2.webp" as="image" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -26,20 +28,22 @@
 
     <main class="garage">
       <section class="hero" id="hero">
-        <div class="garage-lights" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-        <div class="floor" aria-hidden="true"></div>
-        <div class="stage-ring" aria-hidden="true"></div>
+        <div class="ambient" aria-hidden="true"></div>
 
         <div class="scene-header">
           <div class="breadcrumb" id="breadcrumb"><span>C180</span><b>/</b><strong>Visão geral</strong></div>
           <div class="mode-pill"><i></i><span id="modeLabel">EXTERNO</span></div>
         </div>
 
-        <div class="vehicle-stage" id="vehicleStage">
-          <img id="vehicleImage" draggable="false" alt="Mercedes-Benz C180 interativa" />
+        <div class="vehicle-stage" id="vehicleStage" aria-label="Visualização interativa do veículo">
+          <div id="frameDeck" class="frame-deck"></div>
+          <img id="sceneImage" class="scene-image" alt="Cena interativa da Mercedes-Benz C180" hidden draggable="false" />
+          <div id="badgePatch" class="badge-patch" hidden aria-hidden="true">C180</div>
           <div id="hotspotLayer" class="hotspot-layer"></div>
           <div id="partTooltip" class="part-tooltip" hidden></div>
         </div>
+
+        <div class="loading" id="loading"><span></span><b>Preparando garagem</b></div>
 
         <div class="interaction-hint" id="interactionHint"><span class="cursor-symbol"></span><span>Passe o mouse sobre o carro para explorar as peças</span></div>
 
