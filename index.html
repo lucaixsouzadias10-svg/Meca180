@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Garage C180 Pro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar glass">
+      <div>
+        <div class="eyebrow">Projeto interativo</div>
+        <h1>Mercedes-Benz C180</h1>
+        <p class="subline">W205 • 2015 • M274.910 • painel pronto para hospedar</p>
+      </div>
+      <div class="top-actions">
+        <button id="exportBtn" class="btn btn-ghost">Exportar dados</button>
+        <label class="btn btn-ghost import-btn">Importar<input id="importInput" type="file" accept=".json" hidden /></label>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="viewer-card glass">
+        <div class="viewer-head">
+          <div>
+            <div id="viewTitle" class="viewer-title">C180 360°</div>
+            <div id="viewSubtitle" class="viewer-subtitle">Passe o mouse na peça para destacar e clique para abrir.</div>
+          </div>
+          <div id="modeBadge" class="mode-badge">EXTERNO</div>
+        </div>
+
+        <div id="viewer" class="viewer">
+          <div id="stage" class="stage">
+            <img id="stageImage" alt="Visualização da Mercedes C180" />
+            <div id="badgePatch" class="badge-patch" hidden>C180</div>
+            <div id="hotspotLayer" class="hotspot-layer"></div>
+          </div>
+          <div class="floor-glow"></div>
+          <div class="viewer-footer">
+            <div id="viewerHelp" class="viewer-help">Arraste para girar e clique na área desejada.</div>
+            <div class="totals">
+              <strong id="projectTotal">R$ 0</strong>
+              <small><span id="spentTotal">R$ 0 gastos</span> • <span id="remainTotal">R$ 0 restantes</span></small>
+              <div class="progress"><span id="progressBar"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls-row">
+          <button id="prevBtn" class="btn btn-small">↶</button>
+          <button id="autoBtn" class="btn btn-small">Reproduzir rotação</button>
+          <button id="nextBtn" class="btn btn-small">↷</button>
+          <button id="backBtn" class="btn btn-small btn-ghost" hidden>← Voltar</button>
+          <button id="enginePrevBtn" class="btn btn-small" hidden>← Ângulo do motor</button>
+          <button id="engineNextBtn" class="btn btn-small" hidden>Ângulo do motor →</button>
+        </div>
+      </section>
+
+      <aside class="side-panel glass">
+        <div class="panel-block">
+          <div id="panelEyebrow" class="eyebrow">Visão geral</div>
+          <h2 id="panelTitle">Projeto da C180</h2>
+          <p id="panelDescription" class="panel-description">Clique em qualquer parte do carro para registrar o que foi feito, o que falta, valor, quilometragem e links de peças.</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><span>Já gasto</span><strong id="statSpent">R$ 0</strong></div>
+          <div class="stat-card"><span>Falta fazer</span><strong id="statRemain">R$ 0</strong></div>
+          <div class="stat-card"><span>Registros</span><strong id="statCount">0</strong></div>
+          <div class="stat-card"><span>Motor</span><strong>M274.910</strong></div>
+        </div>
+
+        <div class="panel-block">
+          <div id="modeChip" class="chip">Carro completo</div>
+          <div id="actionArea" class="action-area"></div>
+        </div>
+
+        <div class="panel-block">
+          <div id="historyHeading" class="section-title">Últimos registros</div>
+          <div id="historyList" class="history-list"></div>
+        </div>
+
+        <div class="panel-block tech-note">
+          C180 W205 2015 com motor M274.910 1.6 Turbo. Para um modelo 3D totalmente perfeito, o ideal é evoluir para um projeto com Three.js/React e malha 3D modelada sob medida.
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div id="recordModal" class="modal" aria-hidden="true">
+    <div class="modal-card glass">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalTitle">Novo registro</h3>
+          <p>Preencha os detalhes da peça ou alteração.</p>
+        </div>
+        <button id="closeModalBtn" class="btn btn-ghost">✕</button>
+      </div>
+
+      <div id="modalHistoryWrap" class="modal-history" hidden>
+        <div class="section-title">Histórico da peça</div>
+        <div id="modalHistoryList" class="history-list compact"></div>
+      </div>
+
+      <form id="recordForm" class="form-grid">
+        <input id="recordPart" type="hidden" />
+        <input id="recordSystem" type="hidden" />
+
+        <label class="full">O que foi / precisa ser feito?
+          <input id="recordWork" required placeholder="Ex.: trocar, revisar, instalar, pintar..." />
+        </label>
+        <label class="full">O que precisa alterar?
+          <input id="recordChange" placeholder="Ex.: trocar peça, fazer upgrade, mudar acabamento..." />
+        </label>
+        <label>Situação
+          <select id="recordStatus">
+            <option value="pending">Precisa fazer</option>
+            <option value="planned">Planejado</option>
+            <option value="done">Já foi feito</option>
+          </select>
+        </label>
+        <label>Valor estimado (R$)
+          <input id="recordEstimated" type="number" min="0" step="0.01" />
+        </label>
+        <label>Valor gasto (R$)
+          <input id="recordSpent" type="number" min="0" step="0.01" />
+        </label>
+        <label>Quilometragem
+          <input id="recordKm" type="number" min="0" />
+        </label>
+        <label>Data
+          <input id="recordDate" type="date" />
+        </label>
+        <label>Planejado para
+          <input id="recordPlannedDate" type="date" />
+        </label>
+        <label class="full">Link da peça
+          <input id="recordLink" type="url" placeholder="https://" />
+        </label>
+        <label class="full">Observações
+          <textarea id="recordNotes" placeholder="Marca, oficina, garantia, medidas, observações..."></textarea>
+        </label>
+
+        <div class="form-actions full">
+          <button type="button" id="cancelModalBtn" class="btn btn-ghost">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar registro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
